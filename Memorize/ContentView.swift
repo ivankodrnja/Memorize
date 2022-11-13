@@ -8,24 +8,59 @@
 import SwiftUI
 
 struct ContentView: View {
+    var emojis = ["✈️", "🚓", "🚆", "🚜", "🚃", "🚒", "🚌"]
+   @State var emojiCount = 3
+    
     var body: some View {
-        
-        HStack{
-            
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: false)
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: true)
-        }
+        VStack{
+            HStack{
+                
+                ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
+                    CardView(content: emoji)
+                }
+                
+            }
+            Spacer()
+            HStack{
+                remove
+                Spacer()
+                add
+            }
+            .font(.largeTitle)
+            .padding(.horizontal)
+         }
         .padding(.horizontal)
         .foregroundColor(/*@START_MENU_TOKEN@*/.red/*@END_MENU_TOKEN@*/)
         
         
     }
+    
+    var remove: some View {
+        Button {
+            if emojiCount > 1 {
+                emojiCount -= 1
+            }
+        } label: {
+            Image(systemName: "minus.circle")
+            
+        }
+    }
+    
+    var add: some View {
+        Button {
+            if emojiCount < emojis.count {
+                emojiCount += 1
+            }
+        } label: {
+            Image(systemName: "plus.circle")
+            
+        }
+    }
 }
 
 struct CardView: View {
-   @State var isFaceUp: Bool
+    var content: String
+   @State var isFaceUp: Bool = true
     
     var body: some View {
         ZStack {
@@ -37,8 +72,10 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(lineWidth: 3)
                 
-                Text("✈️")
+                Text(content)
+                    .font(.largeTitle)
                     .foregroundColor(Color.orange)
+                
             } else {
                 RoundedRectangle(cornerRadius: 20)
                     .fill()
